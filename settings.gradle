@@ -1,2 +1,3 @@
 rootProject.name = 'SoongsilStudyHelper'
+include 'com.insoo.jang.webcrawler'
 
