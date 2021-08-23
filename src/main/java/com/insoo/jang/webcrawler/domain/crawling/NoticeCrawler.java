@@ -3,8 +3,10 @@ package com.insoo.jang.webcrawler.domain.crawling;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.sql.Date;
 
 @Getter
 @NoArgsConstructor
@@ -13,6 +15,9 @@ public class NoticeCrawler {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @DateTimeFormat("yyyy.MM.dd")
+    private Date registDate;
 
     @Column(length=100, nullable = false)
     private String category;
@@ -23,7 +28,8 @@ public class NoticeCrawler {
     private String register;
 
     @Builder
-    NoticeCrawler(String category, String title, String register){
+    NoticeCrawler(Date registDate, String category, String title, String register){
+        this.registDate = registDate;
         this.category = category;
         this.title = title;
         this.register = register;
