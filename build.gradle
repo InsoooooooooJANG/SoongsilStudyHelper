@@ -39,5 +39,8 @@ dependencies {
 
     implementation('com.h2database:h2')
 
+    //jsoup
+    implementation('org.jsoup:jsoup:1.14.2')
+
     testImplementation("org.springframework.security:spring-security-test")
 }
