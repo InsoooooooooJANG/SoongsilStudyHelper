@@ -30,29 +30,6 @@ public class NoticeCrawlerService {
         return noticeCrawlerRepository.save(requestDto.toEntity()).getId();
     }
 
-    private Date GetToday()
-    {
-        Calendar c = Calendar.getInstance();
-
-        c.set(Calendar.HOUR_OF_DAY, 0);
-        c.set(Calendar.MINUTE, 0);
-        c.set(Calendar.SECOND, 0);
-        c.set(Calendar.MILLISECOND, 0);
-
-        Date today = c.getTime();
-        return today;
-    }
-
-    private Boolean isToday(Date compareDate){
-        Date today = GetToday();
-
-        if(compareDate.equals(null)) {
-            return false;
-        }else if(today.compareTo(compareDate) == 0){
-            return true;
-        }
-        return false;
-    }
 
     private Boolean CheckNoticeExists(String findTitle){
         NoticeCrawler noticeCrawler = noticeCrawlerRepository.findByTitle(findTitle);
@@ -90,7 +67,11 @@ public class NoticeCrawlerService {
             if(CheckNoticeExists(title)){
                 break;
             }else{
-                noticeCrawlerRepository.save(new NoticeCrawlerSaveRequestDto(registDate, category, title, register).toEntity());
+                noticeCrawlerRepository.save(NoticeCrawler.builder().registDate(registDate)
+                                                                    .category(category)
+                                                                    .title(title)
+                                                                    .register(register)
+                                                                    .build());
             }
         }
 
