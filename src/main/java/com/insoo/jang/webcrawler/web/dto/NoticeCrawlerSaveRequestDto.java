@@ -5,15 +5,19 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Getter
 @NoArgsConstructor
 public class NoticeCrawlerSaveRequestDto {
     private String category;
     private String title;
     private String register;
+    private Date registDate;
 
     @Builder
-    public NoticeCrawlerSaveRequestDto(String category, String title, String register){
+    public NoticeCrawlerSaveRequestDto(Date registDate, String category, String title, String register){
+        this.registDate = registDate;
         this.category = category;
         this.title = title;
         this.register = register;
@@ -21,6 +25,7 @@ public class NoticeCrawlerSaveRequestDto {
 
     public NoticeCrawler toEntity(){
         return NoticeCrawler.builder()
+                            .registDate(registDate)
                             .category(category)
                             .title(title)
                             .register(register)

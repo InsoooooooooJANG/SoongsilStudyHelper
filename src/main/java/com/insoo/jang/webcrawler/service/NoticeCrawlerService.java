@@ -54,17 +54,18 @@ public class NoticeCrawlerService {
         return false;
     }
 
-    @Transactional
-    private Boolean CheckNoticeData(){
-        Date today = GetToday();
-        // todo : 오늘 날짜로 저장된 데이터가 있는지 확인하는 로직 구현
-        //NoticeCrawler noticeCrawler = noticeCrawlerRepository.fin
+    private Boolean CheckNoticeExists(String findTitle){
+        NoticeCrawler noticeCrawler = noticeCrawlerRepository.findByTitle(findTitle);
+
+        if(noticeCrawler == null){
+            return false;
+        }else{
+            return true;
+        }
     }
 
     @PostConstruct
     public void getNoticeDatas() throws IOException{
-        CheckNoticeData();
-
         Document doc = Jsoup.parse(new URL(SOONGIL_UNIV_URL).openStream(), "UTF-8", SOONGIL_UNIV_URL);
         Elements contents = doc.select(".row.no-gutters.align-items-center");
 
@@ -82,13 +83,14 @@ public class NoticeCrawlerService {
                 registDate = null;
             }
 
-            if(isToday(registDate)) {
-                String category = noticeContent.get(0).text();
-                String title = noticeContent.get(1).text();
-                String register = registerContent.text();
-                System.out.println(registerContent);
-            } else{
+            String category = noticeContent.get(0).text();
+            String title = noticeContent.get(1).text();
+            String register = registerContent.text();
+
+            if(CheckNoticeExists(title)){
                 break;
+            }else{
+                noticeCrawlerRepository.save(new NoticeCrawlerSaveRequestDto(registDate, category, title, register).toEntity());
             }
         }
 

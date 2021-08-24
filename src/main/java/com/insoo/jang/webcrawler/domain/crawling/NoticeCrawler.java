@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 
 @Getter
 @NoArgsConstructor
@@ -16,7 +16,7 @@ public class NoticeCrawler {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @DateTimeFormat("yyyy.MM.dd")
+    @DateTimeFormat(pattern = "yyyy.MM.dd")
     private Date registDate;
 
     @Column(length=100, nullable = false)
@@ -34,4 +34,5 @@ public class NoticeCrawler {
         this.title = title;
         this.register = register;
     }
+
 }
