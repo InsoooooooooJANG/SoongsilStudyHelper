@@ -41,7 +41,7 @@ public class NoticeCrawlerService {
         }
     }
 
-    @PostConstruct
+    @Transactional
     public void getNoticeDatas() throws IOException{
         Document doc = Jsoup.parse(new URL(SOONGIL_UNIV_URL).openStream(), "UTF-8", SOONGIL_UNIV_URL);
         Elements contents = doc.select(".row.no-gutters.align-items-center");
