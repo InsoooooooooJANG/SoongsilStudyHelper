@@ -20,4 +20,13 @@ public class NoticeCrawlerResponseDto {
         this.title = entity.getTitle();
         this.register = entity.getRegister();
     }
+
+    public NoticeCrawler toEntity(){
+        return NoticeCrawler.builder()
+                .registDate(registDate)
+                .category(category)
+                .title(title)
+                .register(register)
+                .build();
+    }
 }

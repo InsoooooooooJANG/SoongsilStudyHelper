@@ -19,8 +19,7 @@ public class NoticeCrawlerRepositoryImpl implements NoticeCrawlerRepositoryCusto
     public List<NoticeCrawler> findByCategoryKeyword(String category, String keyword){
         return queryFactory.selectFrom(noticeCrawler)
                 .where(eqCategory(category),
-                        contanisRegisterKeyword(keyword),
-                        contanisTitleKeyword(keyword))
+                        contanisRegisterKeyword(keyword).or(contanisTitleKeyword(keyword)))
                 .fetch();
     }
 
