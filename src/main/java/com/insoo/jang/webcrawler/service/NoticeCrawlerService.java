@@ -41,9 +41,16 @@ public class NoticeCrawlerService {
         }
     }
 
+    public void getNoticeDatas(){
+        try {
+            Document doc = Jsoup.parse(new URL(SOONGIL_UNIV_URL).openStream(), "UTF-8", SOONGIL_UNIV_URL);
+        }catch (Exception e){
+            System.out.print(e.getMessage());
+        }
+    }
+
     @Transactional
-    public void getNoticeDatas() throws IOException{
-        Document doc = Jsoup.parse(new URL(SOONGIL_UNIV_URL).openStream(), "UTF-8", SOONGIL_UNIV_URL);
+    public void saveNoticeDatas(Document doc) throws IOException{
         Elements contents = doc.select(".row.no-gutters.align-items-center");
 
         for(Element content: contents){
@@ -77,10 +84,4 @@ public class NoticeCrawlerService {
 
     }
 
-    @Transactional
-    public Boolean crawl(){
-
-
-        return true;
-    }
 }
