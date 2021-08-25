@@ -81,7 +81,7 @@ public class NoticeCrawlerService {
     }
 
     public List<NoticeCrawlerResponseDto> getNotice(String category, String keyword){
-        return noticeCrawlerRepository.findByCatogoryNKeyword(category, keyword).stream()
+        return noticeCrawlerRepository.findByCategoryKeyword(category, keyword).stream()
                                                                                 .map(NoticeCrawlerResponseDto::new)
                                                                                 .collect(Collectors.toList());
     }

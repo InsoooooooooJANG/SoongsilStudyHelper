@@ -10,5 +10,5 @@ public interface NoticeCrawlerRepository extends JpaRepository<NoticeCrawler, Lo
     @Query("SELECT n FROM NoticeCrawler n WHERE n.title = :title")
     NoticeCrawler findByTitle(@Param("title") String title);
 
-    List<NoticeCrawler> findByCatogoryNKeyword(@Param("category") String category, @Param("keyword") String keyword);
+    List<NoticeCrawler> findByCategoryKeyword(@Param("category") String category, @Param("keyword") String keyword);
 }
