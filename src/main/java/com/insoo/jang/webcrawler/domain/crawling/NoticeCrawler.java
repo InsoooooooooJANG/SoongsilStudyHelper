@@ -25,7 +25,7 @@ public class NoticeCrawler {
     private String register;
 
     @Builder
-    NoticeCrawler(String registDate, String category, String title, String register){
+    public NoticeCrawler(String registDate, String category, String title, String register){
         this.registDate = registDate;
         this.category = category;
         this.title = title;

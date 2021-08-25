@@ -2,6 +2,7 @@ package com.insoo.jang.webcrawler.service;
 
 import com.insoo.jang.webcrawler.domain.crawling.NoticeCrawler;
 import com.insoo.jang.webcrawler.domain.crawling.NoticeCrawlerRepository;
+import com.insoo.jang.webcrawler.web.dto.NoticeCrawlerResponseDto;
 import com.insoo.jang.webcrawler.web.dto.NoticeCrawlerSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
@@ -18,6 +19,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -41,7 +44,7 @@ public class NoticeCrawlerService {
         }
     }
 
-    public void getNoticeDatas(){
+    public void getNoticeCrawlingDatas(){
         try {
             Document doc = Jsoup.parse(new URL(SOONGIL_UNIV_URL).openStream(), "UTF-8", SOONGIL_UNIV_URL);
             saveNoticeDatas(doc);
@@ -75,6 +78,12 @@ public class NoticeCrawlerService {
             }
         }
 
+    }
+
+    public List<NoticeCrawlerResponseDto> getNotice(String category, String keyword){
+        return noticeCrawlerRepository.findByCatogoryNKeyword(category, keyword).stream()
+                                                                                .map(NoticeCrawlerResponseDto::new)
+                                                                                .collect(Collectors.toList());
     }
 
 }

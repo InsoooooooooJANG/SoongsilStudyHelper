@@ -1,17 +1,37 @@
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"  // 플러그인의 저장소
+        }
+    }
+    dependencies {
+        classpath "gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:1.0.10"   // 플러그인 디펜던시
+    }
+}
+
+
 plugins { // (1)
     id 'org.springframework.boot' version '2.4.1' // RELEASE 삭제
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
     id 'java'
+    id "com.github.node-gradle.node" version "2.2.4"
+}
+
+apply plugin: "com.ewerk.gradle.plugins.querydsl"
+
+allprojects {
+    repositories {
+        mavenCentral()
+    }
 }
 
 group 'com.insoo.jang'
 version '1.0-SNAPSHOT' + new Date().format("yyyyMMddHHmmss")
 sourceCompatibility = 1.8
 
-repositories {
-    mavenCentral()
-    jcenter()
-}
+
 
 test { // (2)
     useJUnitPlatform()
@@ -42,5 +62,31 @@ dependencies {
     //jsoup
     implementation('org.jsoup:jsoup:1.14.2')
 
+    //querysql
+    implementation("com.querydsl:querydsl-jpa")
+    implementation("com.querydsl:querydsl-apt") //Qclass 생성
+
     testImplementation("org.springframework.security:spring-security-test")
+}
+
+def querydslDir="$buildDir/generated/querydsl" // Qclass 생성 위치
+querydsl {
+    library = "com.querydsl:querydsl-apt:4.2.1"
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+
+sourceSets {
+    main.java.srcDir querydslDir
+}
+
+configurations {
+    querydsl.extendsFrom compileClasspath
+}
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl   // querydsl-apt의 annotationProcessor 경로 지정
+}
+
+clean {
+    file(querydslDir).delete()
 }
