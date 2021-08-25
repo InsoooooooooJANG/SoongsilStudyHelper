@@ -8,7 +8,7 @@ import java.util.Date;
 @Getter
 public class NoticeCrawlerResponseDto {
     private Long Id;
-    private Date registDate;
+    private String registDate;
     private String category;
     private String title;
     private String register;

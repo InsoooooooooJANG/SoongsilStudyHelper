@@ -59,15 +59,7 @@ public class NoticeCrawlerService {
             Elements noticeContent = content.select(".notice_col3 a span span");
             Elements registerContent = content.select(".notice_col4");
 
-            SimpleDateFormat transFormat = new SimpleDateFormat("yyyy.MM.dd");
-            String strRegistDate = registDateContent.text();
-            Date registDate = null;
-            try {
-                registDate = transFormat.parse(strRegistDate);
-            }catch(ParseException e) {
-                registDate = null;
-            }
-
+            String registDate = registDateContent.text();
             String category = noticeContent.get(0).text();
             String title = noticeContent.get(1).text();
             String register = registerContent.text();

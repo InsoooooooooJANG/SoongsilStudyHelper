@@ -25,7 +25,7 @@ public class NoticeCrawlerRepositoryTest {
     @Test
     public void 공지사항_불러오기(){
         //given
-        Date today = DateModule.GetToday();
+        String today = DateModule.GetToday().toString();
         String category="학사";
         String title = "공지사항 1";
         String register="학과사무실";

@@ -13,10 +13,10 @@ public class NoticeCrawlerSaveRequestDto {
     private String category;
     private String title;
     private String register;
-    private Date registDate;
+    private String registDate;
 
     @Builder
-    public NoticeCrawlerSaveRequestDto(Date registDate, String category, String title, String register){
+    public NoticeCrawlerSaveRequestDto(String registDate, String category, String title, String register){
         this.registDate = registDate;
         this.category = category;
         this.title = title;
