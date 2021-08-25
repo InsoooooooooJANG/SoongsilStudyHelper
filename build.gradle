@@ -92,3 +92,5 @@ clean {
         delete(file(querydslDir))
     }
 }
+
+compileQuerydsl.dependsOn(clean)
