@@ -88,5 +88,7 @@ compileQuerydsl {
 }
 
 clean {
-    file(querydslDir).delete()
+    if(file(querydslDir).exists()){
+        delete(file(querydslDir))
+    }
 }
