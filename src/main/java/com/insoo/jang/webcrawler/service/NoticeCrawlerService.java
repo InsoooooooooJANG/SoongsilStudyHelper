@@ -44,6 +44,7 @@ public class NoticeCrawlerService {
     public void getNoticeDatas(){
         try {
             Document doc = Jsoup.parse(new URL(SOONGIL_UNIV_URL).openStream(), "UTF-8", SOONGIL_UNIV_URL);
+            saveNoticeDatas(doc);
         }catch (Exception e){
             System.out.print(e.getMessage());
         }
