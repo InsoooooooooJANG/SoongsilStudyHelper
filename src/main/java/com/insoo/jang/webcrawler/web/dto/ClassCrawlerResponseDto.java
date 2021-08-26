@@ -1,20 +1,22 @@
 package com.insoo.jang.webcrawler.web.dto;
 
+import com.insoo.jang.webcrawler.domain.crawling.ClassCrawler;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
 public class ClassCrawlerResponseDto {
-    private int leftTime;
+    private long leftTime;
     private String category;
     private String className;
     private String title;
 
-    public ClassCrawlerResponseDto(int leftTime, String category, String className, String title){
-        this.leftTime = leftTime;
-        this.category = category;
-        this.className = className;
-        this.title = title;
+
+    public ClassCrawlerResponseDto(ClassCrawler entity){
+        this.leftTime = entity.getLeftTime();
+        this.category = entity.getCategory();
+        this.className = entity.getClassName();
+        this.title = entity.getTitle();
     }
 }
