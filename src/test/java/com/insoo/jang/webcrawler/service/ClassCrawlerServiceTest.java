@@ -41,4 +41,10 @@ public class ClassCrawlerServiceTest {
 
         }
     }
+
+    @Test
+    public void 수업정보를_가져온다() throws Exception{
+        classCrawlerService.GetClassClawlerDatas();
+    }
+
 }

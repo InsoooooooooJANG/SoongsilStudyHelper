@@ -9,6 +9,10 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -18,20 +22,47 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
+@PropertySource("classpath:application-login.properties")
 public class ClassCrawlerService {
+    private final String SOONGSIL_UNIV_MAIN_URL="https://class.ssu.ac.kr";
     private final String SOONGSIL_UNIV_LOGIN_URL="https://class.ssu.ac.kr/login";
     private final String SOONGSIL_UNIV_MYPAGE_URL="https://class.ssu.ac.kr/mypage";
 
-    public void GetClassClawlerDatas() throws Exception{
+    @Autowired
+    Environment env;
+
+    public List<ClassCrawlerResponseDto> GetClassClawlerDatas() {
+        try{
+            List<ClassCrawlerResponseDto> returnValue = new ArrayList<ClassCrawlerResponseDto>();
 
 
+            Connection.Response login = LoginToServer(env.getProperty("id"), env.getProperty("password"));
 
+            List<String> urls = GetClassUrls(login);
+
+            for(String url : urls){
+                String className = GetClassName(login, url);
+                returnValue.addAll(GetClassDetail(login, className, url));
+            }
+
+            return  returnValue;
+        }catch (Exception e){
+            return null;
+        }
     }
 
     public Connection.Response LoginToServer(String id, String password) throws Exception{
 
+        Connection.Response initial=Jsoup.connect(SOONGSIL_UNIV_MAIN_URL)
+                .method(Connection.Method.GET)
+                .execute();
+        Document key=initial.parse();
+        String csrf=initial.cookies().get("XSRF-TOKEN");
+
         Connection.Response login = Jsoup.connect(SOONGSIL_UNIV_LOGIN_URL)
+                                    .cookies(initial.cookies())
                                     .data("id", id, "password", password)
+                                    .data("auto","false","XSRF-TOKEN",csrf)
                                     .method(Connection.Method.POST)
                                     .timeout(5000)
                                     .execute();
@@ -110,4 +141,5 @@ public class ClassCrawlerService {
 
         return syllabus.get(1).text();
     }
+
 }
