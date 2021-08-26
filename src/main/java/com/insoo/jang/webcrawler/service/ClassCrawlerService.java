@@ -94,4 +94,20 @@ public class ClassCrawlerService {
 
         return returnValue;
     }
+
+    public String GetClassName(Connection.Response login, String url) throws  Exception{
+        String classUrl = url + "/assignments/syllabus";
+
+        Document doc = Jsoup.connect(SOONGSIL_UNIV_MYPAGE_URL)
+                .cookies(login.cookies())
+                .timeout(3000000).get();
+
+        Elements syllabus = doc.select(".course_syllabus table tbody tr td");
+
+        if(syllabus.isEmpty()){
+            return null;
+        }
+
+        return syllabus.get(1).text();
+    }
 }
