@@ -25,4 +25,9 @@ public class NoticeCrawlerApiContorller {
     public List<NoticeCrawlerResponseDto> GetNotice(@RequestParam String category, @RequestParam String keyword){
         return noticeCrawlerService.getNotice(category, keyword);
     }
+
+    @GetMapping("api/getclass")
+    public void GetClass(){
+        noticeCrawlerService.getClass();
+    }
 }
