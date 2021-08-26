@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.env.Environment;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
@@ -19,6 +20,9 @@ public class ClassCrawlerServiceTest {
     @Autowired
     ClassCrawlerService classCrawlerService;
 
+    @Autowired
+    Environment env;
+
     @Test
     public void 수업_세부_url을_가져온다(){
         //given
@@ -26,7 +30,7 @@ public class ClassCrawlerServiceTest {
 
         //when
         try{
-            Connection.Response login = classCrawlerService.LoginToServer();
+            Connection.Response login = classCrawlerService.LoginToServer(env.getProperty("id"), env.getProperty("password"));
             List<String> urlArr = classCrawlerService.GetClassUrls(login);
 
             String urlStr = urlArr.get(0);

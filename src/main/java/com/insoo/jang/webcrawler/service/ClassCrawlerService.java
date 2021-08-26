@@ -24,9 +24,7 @@ public class ClassCrawlerService {
 
     }
 
-    public Connection.Response LoginToServer() throws Exception{
-        String id = "20180435";
-        String password = "Qaeldkah9./";
+    public Connection.Response LoginToServer(String id, String password) throws Exception{
 
         Connection.Response login = Jsoup.connect(SOONGSIL_UNIV_LOGIN_URL)
                                     .data("id", id, "password", password)
