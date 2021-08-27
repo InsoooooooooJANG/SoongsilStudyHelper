@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-@PropertySource("classpath:application-login.properties")
+//@PropertySource("classpath:application-login.properties")
 public class ClassCrawlerService {
 
 }

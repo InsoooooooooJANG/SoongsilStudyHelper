@@ -20,6 +20,7 @@ plugins { // (1)
 }
 
 apply plugin: "com.ewerk.gradle.plugins.querydsl"
+apply plugin: 'io.spring.dependency-management'
 
 allprojects {
     repositories {
@@ -60,6 +61,9 @@ dependencies {
 
     //jsoup
     implementation('org.jsoup:jsoup:1.14.2')
+
+    //selenium
+    implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.3.1'
 
     //querysql
     implementation("com.querydsl:querydsl-jpa")

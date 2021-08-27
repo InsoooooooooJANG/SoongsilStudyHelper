@@ -14,8 +14,4 @@ public class ClassCrawlerApiController {
     private final ClassCrawlerService classCrawlerService;
 
 
-    @PostMapping("/api/getclass")
-    public List<ClassCrawlerResponseDto> GetClassName(){
-        return classCrawlerService.GetClassClawlerDatas();
-    }
 }
