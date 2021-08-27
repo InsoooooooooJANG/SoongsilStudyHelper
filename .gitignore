@@ -2,3 +2,5 @@
 /.idea/
 /src/main/generated/
 /src/test/resources/application_login.properties
+/src/main/resources/application-login.properties
+/src/test/resources/application-login.properties
