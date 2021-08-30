@@ -1,6 +1,8 @@
 package com.insoo.jang.webcrawler.service;
 
 
+import com.insoo.jang.webcrawler.domain.crawling.ClassCrawler;
+import com.insoo.jang.webcrawler.web.dto.ClassCrawlerResponseDto;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -65,5 +67,13 @@ public class ClassCrawlerServiceTest {
 
         //then
         assertThat(propId).isEqualTo(id);
+    }
+
+    @Test
+    public void 강의정보를_가져온다(){
+        classCrawlerService.loginToPage();
+        List<ClassCrawlerResponseDto> classInfos = classCrawlerService.getClassInfos();
+        classCrawlerService.quitFromServer();
+
     }
 }
