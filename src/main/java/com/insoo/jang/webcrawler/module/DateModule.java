@@ -22,10 +22,7 @@ public class DateModule {
 
         if(compareDate.equals(null)) {
             return false;
-        }else if(today.compareTo(compareDate) == 0){
-            return true;
-        }
-        return false;
+        }else return today.compareTo(compareDate) == 0;
     }
 
 }

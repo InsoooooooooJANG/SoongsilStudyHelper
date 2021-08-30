@@ -7,9 +7,6 @@ import com.insoo.jang.webcrawler.web.dto.ClassCrawlerResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.safari.SafariDriver;
-import org.openqa.selenium.safari.SafariOptions;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +14,10 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 @Service
@@ -39,7 +33,7 @@ public class ClassCrawlerService {
     private WebDriver classPage;
 
     public void loginToPage(){
-        System.setProperty("webdriver.chrome.driver", "/Users/pc/Documents/OS/chromedriver");
+        System.setProperty("webdriver.chrome.driver", "/Users/jang-insu/Documents/OS/chromedriver");
         driver = new ChromeDriver();
 
         driver.get(SOONSIL_LOGIN_URL);
@@ -140,20 +134,17 @@ public class ClassCrawlerService {
 
                 classPage = wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(by));
 
-                wait = new WebDriverWait(classPage, 30);
-                by = By.className("xncb-fold-toggle-button");
+                wait = new WebDriverWait(classPage, 5);
+                by = By.xpath("//*[contains(text(), '모든 주차 펴기')]");
 
-                wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(by));
-
-                WebElement toggleBtn = classPage.findElement(By.className("xncb-fold-toggle-button"));
+                WebElement toggleBtn = wait.until(ExpectedConditions.elementToBeClickable(by));
+                String str = toggleBtn.getText();
                 toggleBtn.click();
 
-                wait = new WebDriverWait(classPage, 30);
+                wait = new WebDriverWait(classPage, 5);
                 by = By.className("xncb-component-wrapper");
 
-                wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(by));
-
-                lectures = classPage.findElements(By.className("xncb-component-wrapper"));
+                lectures  = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(by));
 
                 SimpleDateFormat transFormat = new SimpleDateFormat("MM월 dd일 HH:mm");
 
@@ -169,8 +160,8 @@ public class ClassCrawlerService {
                 }
 
                 for(WebElement lecture:lectures){
-                    String lectureTitle = lecture.findElement(By.xpath("//p[@class='xncb-component-title']")).getText();
-                    List<WebElement> dates = lecture.findElements(By.xpath("//span[@class='xncb-component-periods-item-date']"));
+                    String lectureTitle = lecture.findElement(By.className("xncb-component-title")).getText();
+                    List<WebElement> dates = lecture.findElements(By.className("xncb-component-periods-item-date"));
                     String strStartDate = dates.get(0).getText();
                     String strEndDate = dates.get(1).getText();
 

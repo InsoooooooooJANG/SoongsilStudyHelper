@@ -12,13 +12,8 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,11 +32,7 @@ public class NoticeCrawlerService {
     private Boolean CheckNoticeExists(String findTitle){
         NoticeCrawler noticeCrawler = noticeCrawlerRepository.findByTitle(findTitle);
 
-        if(noticeCrawler == null){
-            return false;
-        }else{
-            return true;
-        }
+        return noticeCrawler != null;
     }
 
     public void getNoticeCrawlingDatas(){
