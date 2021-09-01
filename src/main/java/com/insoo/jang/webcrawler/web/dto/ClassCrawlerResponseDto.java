@@ -11,12 +11,13 @@ public class ClassCrawlerResponseDto {
     private String category;
     private String className;
     private String title;
-
+    private Boolean isAttend;
 
     public ClassCrawlerResponseDto(ClassCrawler entity){
         this.leftTime = entity.getLeftTime();
         this.category = entity.getCategory();
         this.className = entity.getClassName();
         this.title = entity.getTitle();
+        this.isAttend = entity.getIsAttend();
     }
 }

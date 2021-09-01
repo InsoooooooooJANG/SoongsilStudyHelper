@@ -20,12 +20,14 @@ public class ClassCrawler {
     private String className;
     private String title;
     private String category;
+    private Boolean isAttend;
 
     @Builder
-    public ClassCrawler (String className, String category, String title, long leftTime){
+    public ClassCrawler (String className, String category, String title, long leftTime, Boolean isAttend){
         this.leftTime = leftTime;
         this.title = title;
         this.className = className;
         this.category = category;
+        this.isAttend = isAttend;
     }
 }

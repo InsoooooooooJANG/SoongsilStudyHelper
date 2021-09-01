@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -31,9 +32,11 @@ public class ClassCrawlerService {
     private WebDriver driver;
     private WebDriver myPage;
     private WebDriver classPage;
+    private WebDriver attendancePage;
 
     public void loginToPage(){
-        System.setProperty("webdriver.chrome.driver", "/Users/jang-insu/Documents/OS/chromedriver");
+        //System.setProperty("webdriver.chrome.driver", "/Users/jang-insu/Documents/OS/chromedriver");
+        System.setProperty("webdriver.chrome.driver", "/Users/pc/Documents/os/chromedriver");
         driver = new ChromeDriver();
 
         driver.get(SOONSIL_LOGIN_URL);
@@ -120,6 +123,7 @@ public class ClassCrawlerService {
                             .category("수업")
                             .title("아직 수업이 시작되지 않았습니다.")
                             .leftTime(0)
+                            .isAttend(false)
                             .build();
 
                     returnVal.add(new ClassCrawlerResponseDto(errorClass));
@@ -154,6 +158,7 @@ public class ClassCrawlerService {
                             .category("수업")
                             .title("아직 수업이 시작되지 않았습니다.")
                             .leftTime(0)
+                            .isAttend(false)
                             .build();
 
                     returnVal.add(new ClassCrawlerResponseDto(errorClass));
@@ -168,13 +173,22 @@ public class ClassCrawlerService {
                     Date startDate = transFormat.parse(strStartDate);
                     Date endDate = transFormat.parse(strEndDate);
 
-                    if(DateModule.GetToday().compareTo(startDate) > 0){
+                    Calendar calStart = Calendar.getInstance();
+                    calStart.setTime(startDate);
+                    calStart.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR));
+
+                    Calendar calEnd = Calendar.getInstance();
+                    calEnd.setTime(endDate);
+                    calEnd.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR));
+
+                    if(DateModule.GetToday().compareTo(calEnd.getTime()) > 0){
                         if(!returnVal.stream().filter(o -> o.getClassName().equals(className)).findFirst().isPresent()){
                             ClassCrawler errorClass = ClassCrawler.builder()
                                     .className(className)
                                     .category("수업")
                                     .title("아직 수업이 시작되지 않았습니다.")
                                     .leftTime(0)
+                                    .isAttend(false)
                                     .build();
 
                             returnVal.add(new ClassCrawlerResponseDto(errorClass));
@@ -183,13 +197,48 @@ public class ClassCrawlerService {
                         break;
                     }
 
-                    long dateDiff = endDate.getTime() - startDate.getTime();
+                    long dateDiff = calEnd.getTime().getTime() - calStart.getTime().getTime();
+
+                    Boolean isAttend = false;
+
+                    driver.get(classUrl + "/external_tools/6");
+                    wait = new WebDriverWait(driver, 30);
+                    by = By.xpath("//iframe[@id='tool_content']");
+
+                    attendancePage = wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(by));
+
+                    wait = new WebDriverWait(attendancePage, 5);
+                    by = By.className("xnlsmpb-table");
+
+                    wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(by));
+
+                    List<WebElement> attendances = attendancePage.findElements(By.tagName("tr"));
+                    for(WebElement attendance : attendances){
+                        String lectureName;
+                        try{
+                            lectureName = attendance.findElement(By.className("component-title")).getText();
+                        }catch (Exception e){
+                            continue;
+                        }
+
+                        if(lectureName.equals(lectureTitle)){
+                            try{
+                                WebElement isComplete = attendance.findElement(By.className("complete"));
+
+                                isAttend = true;
+                            }catch (Exception e){
+                                isAttend = false;
+                            }
+                        }
+                    }
+
 
                     ClassCrawler newClass = ClassCrawler.builder()
                             .className(className)
                             .category("수업")
                             .title(lectureTitle)
                             .leftTime(dateDiff)
+                            .isAttend(isAttend)
                             .build();
 
                     returnVal.add(new ClassCrawlerResponseDto(newClass));
@@ -201,6 +250,7 @@ public class ClassCrawlerService {
                         .category("수업")
                         .title("아직 수업이 시작되지 않았습니다.")
                         .leftTime(0)
+                        .isAttend(false)
                         .build();
 
                 returnVal.add(new ClassCrawlerResponseDto(errorClass));
