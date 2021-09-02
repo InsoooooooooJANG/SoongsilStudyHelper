@@ -52,7 +52,7 @@ public class NoticeCrawlerApiControllerTest {
         mvc.perform(post("/api/crawlnotice"))
                 .andExpect(status().isOk());
 
-        mvc.perform(get("/api/getnotice?category=''&keyword=''"))
+        mvc.perform(get("/api/getnotice?category=&keyword="))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
