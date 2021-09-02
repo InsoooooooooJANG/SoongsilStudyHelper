@@ -7,6 +7,7 @@ import com.insoo.jang.webcrawler.web.dto.ClassCrawlerResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +39,10 @@ public class ClassCrawlerService {
         //System.setProperty("webdriver.chrome.driver", "/Users/jang-insu/Documents/OS/chromedriver");
         //System.setProperty("webdriver.chrome.driver", "/Users/pc/Documents/os/chromedriver");
         System.setProperty("webdriver.chrome.driver", "C:\\Users\\장인수주임\\Documents\\os\\chromedriver.exe");
-        driver = new ChromeDriver();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("headless");
 
+        driver = new ChromeDriver(options);
         driver.get(SOONSIL_LOGIN_URL);
 
         WebElement id = driver.findElement(By.id("userid"));

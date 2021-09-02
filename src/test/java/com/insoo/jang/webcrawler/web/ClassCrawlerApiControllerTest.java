@@ -40,7 +40,7 @@ public class ClassCrawlerApiControllerTest {
 
     @Test
     public void  클래스를_가져온다() throws Exception{
-        mvc.perform(get("/api/getclass"))
+        mvc.perform(get("/api/getclassinfos"))
                 .andExpect(status().isOk())
                 .andDo(print());
     }

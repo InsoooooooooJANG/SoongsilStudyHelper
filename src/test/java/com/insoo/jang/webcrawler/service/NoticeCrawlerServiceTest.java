@@ -2,9 +2,7 @@ package com.insoo.jang.webcrawler.service;
 
 import com.insoo.jang.webcrawler.domain.crawling.NoticeCrawler;
 import com.insoo.jang.webcrawler.domain.crawling.NoticeCrawlerRepository;
-import com.insoo.jang.webcrawler.module.DateModule;
 import com.insoo.jang.webcrawler.web.dto.NoticeCrawlerResponseDto;
-import com.nimbusds.jwt.util.DateUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.AfterEach;
