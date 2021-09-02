@@ -1,6 +1,8 @@
 package com.insoo.jang.webcrawler.domain.crawling;
 
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.h2.util.StringUtils;
@@ -24,23 +26,23 @@ public class NoticeCrawlerRepositoryImpl implements NoticeCrawlerRepositoryCusto
     }
 
     private BooleanExpression eqCategory(String category){
-        if(StringUtils.isNullOrEmpty(category)){
+        if(StringUtils.isNullOrEmpty(category) || category.equals("")){
             return null;
         }
         return noticeCrawler.category.eq(category);
     }
 
     private BooleanExpression contanisRegisterKeyword(String keyword){
-        if(StringUtils.isNullOrEmpty(keyword)){
-            return null;
+        if(StringUtils.isNullOrEmpty(keyword) || keyword.equals("")){
+            return Expressions.asBoolean(true).isTrue();
         }
 
         return noticeCrawler.register.contains(keyword);
     }
 
     private BooleanExpression contanisTitleKeyword(String keyword){
-        if(StringUtils.isNullOrEmpty(keyword)){
-            return null;
+        if(StringUtils.isNullOrEmpty(keyword) || keyword.equals("")){
+            return Expressions.asBoolean(true).isTrue();
         }
 
         return noticeCrawler.title.contains(keyword);

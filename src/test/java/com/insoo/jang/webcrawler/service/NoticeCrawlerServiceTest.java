@@ -29,6 +29,17 @@ public class NoticeCrawlerServiceTest {
     public void cleanup() {noticeCrawlerRepository.deleteAll();}
 
     @Test
+    public void 학교_공지사항_가져오는지_확인한다(){
+        noticeCrawlerService.getNoticeCrawlingDatas();
+        List<NoticeCrawler> ret2 = noticeCrawlerRepository.findAll();
+
+        List<NoticeCrawler> ret = noticeCrawlerRepository.findByCategoryKeyword("", "");
+        System.out.println(ret.get(0));
+        List<NoticeCrawlerResponseDto> notice = noticeCrawlerService.getNotice("", "");
+        System.out.println(notice.get(0).getTitle());
+    }
+
+    @Test
     public void 크롤링_데이터가_저장된다(){
         //given
         Document document = Jsoup.parse("\n" +
