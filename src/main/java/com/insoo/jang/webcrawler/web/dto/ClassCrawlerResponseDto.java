@@ -20,4 +20,9 @@ public class ClassCrawlerResponseDto {
         this.title = entity.getTitle();
         this.isAttend = entity.getIsAttend();
     }
+
+
+    public void setAttendance(Boolean attend){
+        this.isAttend = attend;
+    }
 }

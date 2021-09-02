@@ -36,7 +36,8 @@ public class ClassCrawlerService {
 
     public void loginToPage(){
         //System.setProperty("webdriver.chrome.driver", "/Users/jang-insu/Documents/OS/chromedriver");
-        System.setProperty("webdriver.chrome.driver", "/Users/pc/Documents/os/chromedriver");
+        //System.setProperty("webdriver.chrome.driver", "/Users/pc/Documents/os/chromedriver");
+        System.setProperty("webdriver.chrome.driver", "C:\\Users\\장인수주임\\Documents\\os\\chromedriver.exe");
         driver = new ChromeDriver();
 
         driver.get(SOONSIL_LOGIN_URL);
@@ -113,6 +114,11 @@ public class ClassCrawlerService {
             driver.get(classUrl+"/external_tools/2");
             List<WebElement> lectures;
             String className = classNames.get(idx);
+
+            if(className.contains("재학생을")){
+                idx++;
+                continue;
+            }
 
             try {
                 try{
@@ -199,49 +205,48 @@ public class ClassCrawlerService {
 
                     long dateDiff = calEnd.getTime().getTime() - calStart.getTime().getTime();
 
-                    Boolean isAttend = false;
-
-                    driver.get(classUrl + "/external_tools/6");
-                    wait = new WebDriverWait(driver, 30);
-                    by = By.xpath("//iframe[@id='tool_content']");
-
-                    attendancePage = wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(by));
-
-                    wait = new WebDriverWait(attendancePage, 5);
-                    by = By.className("xnlsmpb-table");
-
-                    wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(by));
-
-                    List<WebElement> attendances = attendancePage.findElements(By.tagName("tr"));
-                    for(WebElement attendance : attendances){
-                        String lectureName;
-                        try{
-                            lectureName = attendance.findElement(By.className("component-title")).getText();
-                        }catch (Exception e){
-                            continue;
-                        }
-
-                        if(lectureName.equals(lectureTitle)){
-                            try{
-                                WebElement isComplete = attendance.findElement(By.className("complete"));
-
-                                isAttend = true;
-                            }catch (Exception e){
-                                isAttend = false;
-                            }
-                        }
-                    }
-
 
                     ClassCrawler newClass = ClassCrawler.builder()
                             .className(className)
                             .category("수업")
                             .title(lectureTitle)
                             .leftTime(dateDiff)
-                            .isAttend(isAttend)
                             .build();
 
                     returnVal.add(new ClassCrawlerResponseDto(newClass));
+                }
+
+                driver.get(classUrl + "/external_tools/6");
+                wait = new WebDriverWait(driver, 30);
+                by = By.xpath("//iframe[@id='tool_content']");
+
+                attendancePage = wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(by));
+
+                wait = new WebDriverWait(attendancePage, 5);
+                by = By.className("xnlsmpb-table");
+
+                wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(by));
+
+                List<WebElement> attendances = attendancePage.findElements(By.tagName("tr"));
+                for(WebElement attendance : attendances){
+                    String lectureName;
+                    try{
+                        lectureName = attendance.findElement(By.className("component-title")).getText();
+                    }catch (Exception e){
+                        continue;
+                    }
+
+                    ClassCrawlerResponseDto findClass = returnVal.stream().filter(e-> e.getTitle().equals(lectureName)).findAny().orElse(null);
+
+                    if(findClass != null){
+                        try{
+                            WebElement isComplete = attendance.findElement(By.className("complete"));
+
+                            findClass.setAttendance(true);
+                        }catch (Exception e){
+                            findClass.setAttendance(false);
+                        }
+                    }
                 }
 
             }catch (Exception e){
