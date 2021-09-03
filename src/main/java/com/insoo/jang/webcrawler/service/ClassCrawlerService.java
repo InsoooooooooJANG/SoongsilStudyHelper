@@ -131,8 +131,8 @@ public class ClassCrawlerService {
                             .className(classNames.get(idx))
                             .category("수업")
                             .title("아직 수업이 시작되지 않았습니다.")
-                            .leftTime(0)
-                            .isAttend(false)
+                            .leftTime("-")
+                            .isAttend("-")
                             .build();
 
                     returnVal.add(new ClassCrawlerResponseDto(errorClass));
@@ -166,8 +166,8 @@ public class ClassCrawlerService {
                             .className(className)
                             .category("수업")
                             .title("아직 수업이 시작되지 않았습니다.")
-                            .leftTime(0)
-                            .isAttend(false)
+                            .leftTime("-")
+                            .isAttend("-")
                             .build();
 
                     returnVal.add(new ClassCrawlerResponseDto(errorClass));
@@ -176,19 +176,14 @@ public class ClassCrawlerService {
                 for(WebElement lecture:lectures){
                     String lectureTitle = lecture.findElement(By.className("xncb-component-title")).getText();
                     List<WebElement> dates = lecture.findElements(By.className("xncb-component-periods-item-date"));
-                    String strStartDate = dates.get(0).getText();
+
                     String strEndDate = dates.get(1).getText();
-
-                    Date startDate = transFormat.parse(strStartDate);
                     Date endDate = transFormat.parse(strEndDate);
-
-                    Calendar calStart = Calendar.getInstance();
-                    calStart.setTime(startDate);
-                    calStart.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR));
-
                     Calendar calEnd = Calendar.getInstance();
                     calEnd.setTime(endDate);
                     calEnd.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR));
+
+                    String leftTime = lecture.findElement(By.className("xncb-component-sub-d_day")).getText();
 
                     if(DateModule.GetToday().compareTo(calEnd.getTime()) > 0){
                         if(!returnVal.stream().filter(o -> o.getClassName().equals(className)).findFirst().isPresent()){
@@ -196,8 +191,8 @@ public class ClassCrawlerService {
                                     .className(className)
                                     .category("수업")
                                     .title("아직 수업이 시작되지 않았습니다.")
-                                    .leftTime(0)
-                                    .isAttend(false)
+                                    .leftTime("-")
+                                    .isAttend("-")
                                     .build();
 
                             returnVal.add(new ClassCrawlerResponseDto(errorClass));
@@ -206,14 +201,12 @@ public class ClassCrawlerService {
                         break;
                     }
 
-                    long dateDiff = calEnd.getTime().getTime() - calStart.getTime().getTime();
-
-
                     ClassCrawler newClass = ClassCrawler.builder()
                             .className(className)
                             .category("수업")
                             .title(lectureTitle)
-                            .leftTime(dateDiff)
+                            .leftTime(leftTime)
+                            .isAttend("false")
                             .build();
 
                     returnVal.add(new ClassCrawlerResponseDto(newClass));
@@ -243,11 +236,17 @@ public class ClassCrawlerService {
 
                     if(findClass != null){
                         try{
-                            WebElement isComplete = attendance.findElement(By.className("complete"));
+                            attendance.findElement(By.className("complete"));
 
-                            findClass.setAttendance(true);
+                            findClass.setAttendance("true");
                         }catch (Exception e){
-                            findClass.setAttendance(false);
+                            try{
+                                attendance.findElement(By.className("not-graded"));
+                                findClass.setAttendance("출결 대상 아님");
+                            }catch(Exception e2)
+                            {
+                                findClass.setAttendance("false");
+                            }
                         }
                     }
                 }
@@ -257,8 +256,8 @@ public class ClassCrawlerService {
                         .className(className)
                         .category("수업")
                         .title("아직 수업이 시작되지 않았습니다.")
-                        .leftTime(0)
-                        .isAttend(false)
+                        .leftTime("-")
+                        .isAttend("-")
                         .build();
 
                 returnVal.add(new ClassCrawlerResponseDto(errorClass));

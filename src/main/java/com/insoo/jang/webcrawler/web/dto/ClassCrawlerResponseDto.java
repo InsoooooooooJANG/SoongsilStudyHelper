@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class ClassCrawlerResponseDto {
-    private long leftTime;
+    private String leftTime;
     private String category;
     private String className;
     private String title;
-    private Boolean isAttend;
+    private String isAttend;
 
     public ClassCrawlerResponseDto(ClassCrawler entity){
         this.leftTime = entity.getLeftTime();
@@ -22,7 +22,7 @@ public class ClassCrawlerResponseDto {
     }
 
 
-    public void setAttendance(Boolean attend){
+    public void setAttendance(String attend){
         this.isAttend = attend;
     }
 }

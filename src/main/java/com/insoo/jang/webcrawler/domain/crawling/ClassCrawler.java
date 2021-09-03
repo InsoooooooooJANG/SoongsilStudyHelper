@@ -16,14 +16,14 @@ public class ClassCrawler {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private long leftTime;
+    private String leftTime;
     private String className;
     private String title;
     private String category;
-    private Boolean isAttend;
+    private String isAttend;
 
     @Builder
-    public ClassCrawler (String className, String category, String title, long leftTime, Boolean isAttend){
+    public ClassCrawler (String className, String category, String title, String leftTime, String isAttend){
         this.leftTime = leftTime;
         this.title = title;
         this.className = className;
